@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hermes Mobile 隐私政策</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,system-ui,"Segoe UI","PingFang SC","Hiragino Sans GB",sans-serif;max-width:760px;margin:40px auto;padding:0 20px;line-height:1.8;color:#1a1a1a;background:#fff}
+h1{font-size:2em;margin-top:1em}
+h2{font-size:1.5em;margin-top:1.5em;padding-bottom:.3em;border-bottom:1px solid #eaecef}
+h3{font-size:1.2em;margin-top:1em}
+code{background:#f6f8fa;padding:.2em .4em;border-radius:3px;font-size:.9em;font-family:"SF Mono",Monaco,Consolas,monospace}
+pre{background:#f6f8fa;padding:1em;border-radius:6px;overflow:auto}
+pre code{background:none;padding:0}
+ul{padding-left:1.5em}
+li{margin:.3em 0}
+a{color:#0366d6;text-decoration:none}
+a:hover{text-decoration:underline}
+.nav{margin-bottom:2em;padding-bottom:1em;border-bottom:1px solid #eaecef;font-size:.95em}
+.nav a{margin-right:1em}
+.meta{color:#586069;font-size:.95em}
+</style>
+</head>
+<body>
+<div class="nav"><a href="./">首页</a> <a href="privacy-policy-en.html">Privacy (EN)</a> <a href="privacy-policy-zh.html">隐私 (ZH)</a> <a href="review-notes.html">Review Notes</a></div>
+
+<h1>Hermes Mobile 隐私政策</h1>
+
+<p class="meta">最后更新：2026-06-10<br>
+适用版本：v1.0 起<br>
+联系邮箱：<code>2922062699@qq.com</code></p>
+
+<h2>1. 总览</h2>
+
+<p>Hermes Mobile 是一个 iOS 移动控制台，用于连接用户自己部署的 Hermes Agent。Hermes Mobile 的设计原则是：聊天内容、Agent 响应、API Key 和 Gateway 配置由用户自己控制，不经过 Hermes Mobile 开发者运营的服务器。</p>
+
+<p>本政策说明 Hermes Mobile App 本身如何处理数据。用户自行部署的 Hermes Agent、Bridge、VPN、Cloudflare Tunnel 或其他第三方网络服务，可能有自己的数据处理方式。</p>
+
+<h2>2. 我们如何收集和使用数据</h2>
+
+<h3>2.1 App 不收集的内容</h3>
+
+<p>Hermes Mobile App 不会将以下内容发送到 Hermes Mobile 开发者服务器：</p>
+
+<ul>
+<li>用户聊天内容。</li>
+<li>Agent 回复内容。</li>
+<li>Hermes Agent Gateway URL。</li>
+<li>Agent API Key。</li>
+<li>Bridge API Key。</li>
+<li>会话历史。</li>
+<li>文件或图片附件内容。</li>
+<li>用户通讯录、位置、麦克风数据或广告标识符。</li>
+</ul>
+
+<p>Hermes Mobile 当前不使用 IDFA，不做广告追踪，不将用户数据出售给第三方。</p>
+
+<h3>2.2 可能收集的匿名诊断数据</h3>
+
+<p>如果用户安装的版本启用了 Apple、Expo 或运行时平台提供的崩溃诊断能力，可能会产生以下匿名或低识别性数据：</p>
+
+<ul>
+<li>崩溃日志。</li>
+<li>基础设备型号。</li>
+<li>iOS 版本。</li>
+<li>App 版本。</li>
+<li>性能或启动失败诊断。</li>
+</ul>
+
+<p>这些数据仅用于定位崩溃和提升 App 稳定性，不用于广告追踪。若正式版本未启用崩溃上报，则 App Store Connect 的 App Privacy 表单应按实际上报能力填写。</p>
+
+<h2>3. 数据流向</h2>
+
+<h3>3.1 聊天数据</h3>
+
+<p>用户在 Hermes Mobile 中发送的聊天请求会从 iPhone 直接发送到用户配置的 Hermes Agent Gateway。该 Gateway 通常运行在用户自己的电脑、局域网、VPN 网络或用户自行配置的 HTTPS Tunnel 后面。</p>
+
+<p>Hermes Mobile 开发者不会代理、存储或读取这些聊天内容。</p>
+
+<p>Hermes Mobile 会在用户设备本地保存必要的配置和会话数据，用于提供会话恢复、历史记录和连接设置功能。用户可以通过卸载 App 删除 iPhone 上的本地数据。</p>
+
+<h3>3.2 远程访问场景</h3>
+
+<p>用户可以选择局域网、Tailscale、Cloudflare Tunnel 或其他自有网络方案访问 Hermes Agent。此类网络链路由用户自己配置并承担相应隐私和安全责任。</p>
+
+<p>如果用户使用 Tailscale，流量由用户自己的 Tailscale 网络处理。</p>
+
+<p>如果用户使用 Cloudflare Tunnel，Cloudflare 可能会处理连接 metadata，并在其边缘网络中处理 HTTPS 连接。该方案不是 Hermes Mobile 开发者托管的服务。</p>
+
+<h2>4. 第三方服务</h2>
+
+<p>Hermes Mobile 使用以下技术或可能与以下服务配合使用：</p>
+
+<ul>
+<li>Expo / React Native：用于构建 iOS App。</li>
+<li>Apple iOS / App Store / TestFlight：用于安装、分发和系统权限。</li>
+<li>Tailscale：用户可选的远程访问网络，不由 Hermes Mobile 打包或托管。</li>
+<li>Cloudflare Tunnel：用户可选的 HTTPS Tunnel，不由 Hermes Mobile 开发者强制使用。</li>
+<li>用户自己的 Hermes Agent、Hermes Mobile Bridge 和 LLM Provider。</li>
+</ul>
+
+<p>这些第三方服务可能有自己的隐私政策。用户应自行确认其网络和 Agent 部署方式。</p>
+
+<h2>5. 用户权利</h2>
+
+<p>用户可以：</p>
+
+<ul>
+<li>卸载 Hermes Mobile，以删除 iPhone 本地 App 数据。</li>
+<li>在 Hermes Mobile 设置中修改或清空 Gateway URL / API Key。</li>
+<li>在 PC 端 Hermes Agent 中清理或删除本地会话、日志和长期记忆。</li>
+<li>在 Tailscale、Cloudflare 或其他第三方服务中删除相应网络配置。</li>
+<li>通过 <code>2922062699@qq.com</code> 联系开发者，询问隐私政策或 App 数据处理问题。</li>
+</ul>
+
+<h2>6. 安全措施</h2>
+
+<p>Hermes Mobile 不托管用户的 Agent 服务。用户应自行保护：</p>
+
+<ul>
+<li>Hermes Agent API Key。</li>
+<li>Bridge API Key。</li>
+<li>PC 端文件系统和项目目录权限。</li>
+<li>VPN / Tunnel 访问权限。</li>
+<li>长期 Memory 数据。</li>
+</ul>
+
+<p>Hermes Mobile 会将当前会话的临时上下文分开管理；Hermes Agent 的长期记忆可能跨会话使用，用于提供连续体验。用户可在 Hermes Agent 侧管理或清除长期记忆。</p>
+
+<h2>7. 儿童保护（COPPA）</h2>
+
+<p>Hermes Mobile 面向个人开发者、研究者和高级用户，不面向 13 岁以下儿童。我们不会有意收集儿童个人信息。</p>
+
+<h2>8. 政策变更</h2>
+
+<p>我们可能会随 App 功能变化更新本政策。若数据处理方式发生重大变化，我们会在 App Store 页面、项目文档或 App 内入口中更新说明。</p>
+
+<h2>9. 联系我们</h2>
+
+<p>如有隐私相关问题，请联系：</p>
+
+<pre><code>2922062699@qq.com</code></pre>
+
+</body>
+</html>
