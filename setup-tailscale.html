@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setup Tailscale</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",sans-serif;max-width:720px;margin:40px auto;padding:0 20px;line-height:1.7;color:#1a1a1a;background:#fff}
+h1{font-size:2em;margin-top:1em}
+h2{font-size:1.5em;margin-top:1.5em;padding-bottom:.3em;border-bottom:1px solid #eaecef}
+h3{font-size:1.2em;margin-top:1em}
+code{background:#f6f8fa;padding:.2em .4em;border-radius:3px;font-size:.9em;font-family:"SF Mono",Monaco,Consolas,monospace}
+pre{background:#f6f8fa;padding:1em;border-radius:6px;overflow:auto}
+pre code{background:none;padding:0}
+ul{padding-left:1.5em}
+li{margin:.3em 0}
+a{color:#0366d6;text-decoration:none}
+a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;margin:1em 0}
+th,td{border:1px solid #d0d7de;padding:.55em;text-align:left}
+th{background:#f6f8fa}
+.nav{margin-bottom:2em;padding-bottom:1em;border-bottom:1px solid #eaecef;font-size:.95em;display:flex;flex-wrap:wrap;gap:.5em 1em}
+.nav a{margin-right:0}
+.meta{color:#586069;font-size:.95em}
+.note{background:#fff8c5;border:1px solid #eac54f;border-radius:6px;padding:1em;margin:1em 0}
+.warning{background:#fff1f0;border:1px solid #ffccc7;border-radius:6px;padding:1em;margin:1em 0}
+</style>
+</head>
+<body>
+<div class="nav">
+  <a href="./">Home</a>
+  <a href="privacy-policy-en.html">Privacy (EN)</a>
+  <a href="privacy-policy-zh.html">隐私 (ZH)</a>
+  <a href="review-notes.html">Review Notes</a>
+  <a href="setup-hermes-agent.html">Setup: Hermes Agent</a>
+  <a href="setup-codex-worker.html">Setup: Codex</a>
+  <a href="setup-cloudflare-tunnel.html">Setup: Cloudflare Tunnel</a>
+  <a href="setup-tailscale.html">Setup: Tailscale</a>
+</div>
+
+<h1>Setup Tailscale / 配置 Tailscale</h1>
+
+<p class="meta">Last updated: 2026-06-11<br>
+Audience: users who prefer a private mesh VPN instead of a public tunnel URL.</p>
+
+<h2>1. What This Is / 这是什么</h2>
+
+<p>Tailscale creates a private mesh VPN between your PC and iPhone. Hermes Mobile can then connect to the PC Hermes Agent through the PC's <code>100.x.x.x</code> Tailscale IP address.</p>
+
+<p>Tailscale 会在电脑和 iPhone 之间建立私有 mesh VPN。Hermes Mobile 可以通过电脑的 <code>100.x.x.x</code> Tailscale 地址访问 Hermes Agent。</p>
+
+<h2>2. Tailscale vs Cloudflare Tunnel</h2>
+
+<table>
+<thead>
+<tr><th>Dimension</th><th>Tailscale</th><th>Cloudflare Tunnel</th></tr>
+</thead>
+<tbody>
+<tr><td>Privacy</td><td>Private mesh network with encrypted device links</td><td>HTTPS tunnel through Cloudflare edge</td></tr>
+<tr><td>Mainland China access</td><td>Depends on account login path; Google login may be blocked</td><td>Usually reachable directly in current beta tests</td></tr>
+<tr><td>iPhone client required</td><td>Yes</td><td>No</td></tr>
+<tr><td>Multiple devices</td><td>Automatic mesh</td><td>Single tunnel endpoint unless configured otherwise</td></tr>
+</tbody>
+</table>
+
+<h2>3. Install on PC / PC 端安装</h2>
+
+<h3>Windows</h3>
+
+<p>Download Tailscale for Windows: <a href="https://tailscale.com/download/windows">tailscale.com/download/windows</a>.</p>
+
+<p>After installation, log in and verify your PC IP:</p>
+
+<pre><code>&amp; "C:\Program Files\Tailscale\tailscale.exe" ip -4</code></pre>
+
+<h3>macOS</h3>
+
+<p>Download Tailscale for macOS: <a href="https://tailscale.com/download/mac">tailscale.com/download/mac</a>.</p>
+
+<pre><code>tailscale ip -4</code></pre>
+
+<h3>Linux</h3>
+
+<p>Use the official Linux installation guide: <a href="https://tailscale.com/download/linux">tailscale.com/download/linux</a>.</p>
+
+<pre><code>tailscale ip -4</code></pre>
+
+<h2>4. Install on iPhone / iPhone 端安装</h2>
+
+<ol>
+<li>Install Tailscale from the iOS App Store.</li>
+<li>Log in with the same Tailscale account used on the PC.</li>
+<li>Keep Tailscale connected while using Hermes Mobile remotely.</li>
+</ol>
+
+<p>iOS App link: <a href="https://apps.apple.com/app/tailscale/id1470499037">Tailscale on the App Store</a>.</p>
+
+<h2>5. Configure Hermes Mobile / 配置 Hermes Mobile</h2>
+
+<ol>
+<li>Find the PC's Tailscale IP, for example <code>100.69.191.73</code>.</li>
+<li>Use the Gateway URL format <code>http://100.x.x.x:8642</code>.</li>
+<li>Enter your Hermes Agent API Key.</li>
+<li>Connect from onboarding or Settings.</li>
+</ol>
+
+<h2>6. Verify / 验证</h2>
+
+<p>From the iPhone browser while Tailscale is connected, open:</p>
+
+<pre><code>http://100.x.x.x:8642/health</code></pre>
+
+<p>Expected result: a small page or JSON response showing status OK / Hermes Agent.</p>
+
+<h2>7. Troubleshooting / 常见问题</h2>
+
+<h3>iOS login is blocked</h3>
+<p>If Google login is blocked in your region, try GitHub login or another supported login method.</p>
+
+<h3>100.x.x.x does not connect</h3>
+<ul>
+<li>Confirm Tailscale is connected on both PC and iPhone.</li>
+<li>Confirm both devices are logged into the same Tailscale account or tailnet.</li>
+<li>Run <code>tailscale status</code> on the PC if available.</li>
+<li>Verify Hermes Agent is running at <code>http://127.0.0.1:8642/health</code> on the PC.</li>
+</ul>
+
+<h2>8. Known v1.0 Limitation / 已知 v1.0 限制</h2>
+
+<div class="warning">
+Settings test connection may be unstable for Tailscale URLs, similar to Cloudflare Tunnel URLs. If Settings fails but the iPhone browser can open <code>/health</code>, re-enter onboarding and configure the URL there. v1.1 will fix this flow.
+</div>
+
+<div class="note">
+Editor Notes for review tomorrow:
+<ul>
+<li>[ ] Add screenshots where marked.</li>
+<li>[ ] Verify exact command syntax matches your Hermes Agent build.</li>
+<li>[ ] Confirm current Tailscale login recommendation for your target users.</li>
+</ul>
+</div>
+
+</body>
+</html>
