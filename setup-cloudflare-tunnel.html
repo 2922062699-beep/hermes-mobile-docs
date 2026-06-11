@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setup Cloudflare Tunnel</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",sans-serif;max-width:720px;margin:40px auto;padding:0 20px;line-height:1.7;color:#1a1a1a;background:#fff}
+h1{font-size:2em;margin-top:1em}
+h2{font-size:1.5em;margin-top:1.5em;padding-bottom:.3em;border-bottom:1px solid #eaecef}
+h3{font-size:1.2em;margin-top:1em}
+code{background:#f6f8fa;padding:.2em .4em;border-radius:3px;font-size:.9em;font-family:"SF Mono",Monaco,Consolas,monospace}
+pre{background:#f6f8fa;padding:1em;border-radius:6px;overflow:auto}
+pre code{background:none;padding:0}
+ul{padding-left:1.5em}
+li{margin:.3em 0}
+a{color:#0366d6;text-decoration:none}
+a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;margin:1em 0}
+th,td{border:1px solid #d0d7de;padding:.55em;text-align:left}
+th{background:#f6f8fa}
+.nav{margin-bottom:2em;padding-bottom:1em;border-bottom:1px solid #eaecef;font-size:.95em;display:flex;flex-wrap:wrap;gap:.5em 1em}
+.nav a{margin-right:0}
+.meta{color:#586069;font-size:.95em}
+.note{background:#fff8c5;border:1px solid #eac54f;border-radius:6px;padding:1em;margin:1em 0}
+.warning{background:#fff1f0;border:1px solid #ffccc7;border-radius:6px;padding:1em;margin:1em 0}
+</style>
+</head>
+<body>
+<div class="nav">
+  <a href="./">Home</a>
+  <a href="privacy-policy-en.html">Privacy (EN)</a>
+  <a href="privacy-policy-zh.html">隐私 (ZH)</a>
+  <a href="review-notes.html">Review Notes</a>
+  <a href="setup-hermes-agent.html">Setup: Hermes Agent</a>
+  <a href="setup-codex-worker.html">Setup: Codex</a>
+  <a href="setup-cloudflare-tunnel.html">Setup: Cloudflare Tunnel</a>
+  <a href="setup-tailscale.html">Setup: Tailscale</a>
+</div>
+
+<h1>Setup Cloudflare Tunnel / 配置 Cloudflare Tunnel</h1>
+
+<p class="meta">Last updated: 2026-06-11<br>
+Audience: users who want to reach their PC Hermes Agent from iPhone on 4G or another Wi-Fi.</p>
+
+<h2>1. What This Is / 这是什么</h2>
+
+<p>Cloudflare Tunnel can expose your local Hermes Agent Gateway through an HTTPS URL. This lets an iPhone reach the PC even when it is not on the same Wi-Fi.</p>
+
+<p>Cloudflare Tunnel 可以把电脑本地的 Hermes Agent Gateway 暴露为一个 HTTPS 地址，让 iPhone 在 4G 或不同 Wi-Fi 下也能远程连接。</p>
+
+<h2>2. When to Use It / 适用场景</h2>
+
+<ul>
+<li>Personal remote access to your own PC Hermes Agent.</li>
+<li>Temporary Demo Agent for App Store review.</li>
+<li>Sharing a controlled beta environment with a trusted tester.</li>
+</ul>
+
+<p>It is not ideal for latency-sensitive workloads or public services without additional hardening.</p>
+
+<h2>3. Tunnel Modes / 两种 tunnel 模式</h2>
+
+<table>
+<thead>
+<tr><th>Mode</th><th>URL stability</th><th>Domain requirement</th><th>Best for</th></tr>
+</thead>
+<tbody>
+<tr><td>Quick tunnel</td><td>Changes after restart</td><td>No domain required</td><td>Temporary testing / demo</td></tr>
+<tr><td>Named tunnel</td><td>Stable</td><td>Own domain required</td><td>Production-style setup</td></tr>
+</tbody>
+</table>
+
+<h2>4. Mainland China Access Note / 中国大陆访问性说明</h2>
+
+<p>During 2026-06-11 testing, an iPhone on 4G could directly access a <code>trycloudflare.com</code> tunnel URL without VPN. Cloudflare edge locations observed during testing may include regions such as <code>lax</code>, <code>hkg</code>, or <code>khh</code>.</p>
+
+<p>不同运营商和地区可能有差异。如果 4G 访问失败，请换网络、重启 tunnel，或改用 Tailscale / named tunnel。</p>
+
+<h2>5. Quick Tunnel / 临时 tunnel 完整步骤</h2>
+
+<h3>Install cloudflared / 安装 cloudflared</h3>
+
+<h4>Windows PowerShell</h4>
+
+<pre><code>winget install --id Cloudflare.cloudflared</code></pre>
+
+<h4>macOS</h4>
+
+<pre><code>brew install cloudflared</code></pre>
+
+<h4>Linux</h4>
+
+<p>Use the official Cloudflare package instructions: <a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/downloads/">Cloudflare cloudflared downloads</a>.</p>
+
+<h3>Start tunnel / 启动 tunnel</h3>
+
+<pre><code>cloudflared tunnel --url http://localhost:8642</code></pre>
+
+<p>Copy the generated <code>https://*.trycloudflare.com</code> URL.</p>
+
+<h3>Configure Hermes Mobile / 配置 Hermes Mobile</h3>
+
+<ol>
+<li>Open Hermes Mobile.</li>
+<li>Go to Settings or re-enter onboarding.</li>
+<li>Use the Cloudflare URL as the Gateway URL.</li>
+<li>Enter your Hermes Agent API Key.</li>
+</ol>
+
+<h2>6. Named Tunnel / 固定域名 tunnel</h2>
+
+<p>Named tunnel is recommended when you need a stable URL.</p>
+
+<ol>
+<li>Create a Cloudflare account: <a href="https://dash.cloudflare.com/">dash.cloudflare.com</a>.</li>
+<li>Add your domain to Cloudflare.</li>
+<li>Create a tunnel in the Cloudflare Zero Trust dashboard.</li>
+<li>Install <code>cloudflared</code> on the PC.</li>
+<li>Configure ingress to forward your chosen hostname to <code>http://localhost:8642</code>.</li>
+<li>Run cloudflared as a service.</li>
+</ol>
+
+<p>Official guide: <a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/">Cloudflare Tunnel documentation</a>.</p>
+
+<h2>7. Troubleshooting / 常见问题</h2>
+
+<h3>cloudflared says no such host</h3>
+<p>Retry once and check DNS / IPv6 connectivity. Some networks need a second tunnel start.</p>
+
+<h3>iPhone gets timeout</h3>
+<p>Check 4G signal, restart the tunnel, or try again later. Cloudflare edge selection may vary.</p>
+
+<h3>Settings test fails but onboarding works</h3>
+<p>Known v1.0 limitation: Settings <code>testConnection</code> can be unstable for remote URLs. Re-enter onboarding and configure the Cloudflare URL there. v1.1 will fix this flow.</p>
+
+<h2>8. Security Notes / 安全提示</h2>
+
+<ul>
+<li>Anyone who knows a quick tunnel URL can reach the Gateway endpoint.</li>
+<li>The Hermes Agent API Key is the main protection for your Gateway.</li>
+<li>Do not post a <code>trycloudflare.com</code> URL publicly.</li>
+<li>Stopping the <code>cloudflared</code> process immediately disconnects remote access.</li>
+</ul>
+
+<div class="note">
+Editor Notes for review tomorrow:
+<ul>
+<li>[ ] Add screenshots where marked.</li>
+<li>[ ] Verify exact command syntax matches your Hermes Agent build.</li>
+<li>[ ] Replace any demo domain placeholder if a named tunnel is used.</li>
+</ul>
+</div>
+
+</body>
+</html>
